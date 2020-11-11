@@ -1,7 +1,7 @@
 library(tidyverse)
 library(car)
 library(knitr)
-
+library(rmarkdown)
 
 d2 <- read.csv(file = 'performance.csv',sep = ",")
 d1 <- c(229,186,396,233,238,158,259,317,222,375,156,108,197,227,379,234)
@@ -54,5 +54,5 @@ t.test(d1, mu=225, conf.level=0.95)
 
 
 
-
+render('lab1_report_group9.Rmd')
 
