@@ -2,10 +2,14 @@ library(tidyverse)
 library(car)
 library(knitr)
 library(rmarkdown)
+library(psych)
 
-d2 <- read.csv(file = 'performance.csv',sep = ",")
+
 d1 <- c(229,186,396,233,238,158,259,317,222,375,156,108,197,227,379,234)
 # a
+description <- data.frame(Mean=mean(d1),SD=sd(d1),Variance=var(d1),Median=median(d1))
+
+
 mean(d1)
 sd(d1)
 var(d1)
@@ -48,9 +52,51 @@ shapiro.test(d1)
 
 
 #g
+# Sample size > 30 and unknown SD of the population
 
 
-t.test(d1, mu=225, conf.level=0.95)
+t.test(d1, mu=225 ,conf.level=0.95)
+
+
+
+
+
+## Performance
+df2 <- read.csv(file = 'performance.csv',sep = ",")
+kable(df2)
+df2 <- pivot_longer(df2, cols=everything(), names_to="Group", values_to="Time")
+kable(df2)
+# a
+psych::describeBy(df2$Time,df2$Group)
+
+
+# b
+# Group converted from char to factors, time numeric
+str(df2)
+
+df2$Group <- as.factor(df2$Group)
+df2$Time <- as.numeric(df2$Time)
+
+str(df2)
+
+#c
+
+lm1 <- lm(Time ~ Group,df2)
+
+# Intercept 16.005
+# b 0.01
+# X optimized = 0, original = 1
+
+#d
+
+# p < a , since p is greater than a, the factor group is not statistically significant
+# We can't assume that timeOptimized is better than timeOriginal
+t.test(formula = Time~Group,
+       data=df2, var.equal=T)
+
+
+
+
 
 
 
