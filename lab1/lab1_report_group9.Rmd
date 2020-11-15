@@ -1,58 +1,110 @@
 ---
-title: "lab1_report_group9"
-output: html_document
+title: "Empirical software engineering"
+subtitle: |
+  | Lab 1: Descriptive statistics, regression and hypothesis testing
+  | Group 9
+output:
+  pdf_document
+author:
+  - Anton Lutteman
+  - Daniel Olsson
+  - Gerson Silva Filho
+  - Johan Mejborn
+date: "`r format(Sys.time(), '%d %B %Y')`"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Exercise 1 - Time to Develop
 
-# Lab 1 group 9
+## a) Descriptive data:
+Mean = `r mean(d1)` \
+Median = `r median(d1)` \
+Standard deviation = `r sd(d1)` \
+Variance = `r var(d1)` \
 
-## a)
-
-```{r desc ,echo=FALSE}
-descriptiont <- t(description)
-kable(description)
-```
-
-## b)
+## b) What is being calculated?
+What is being calculated is the **sample** standard deviation, since the company has provided the time 
+spent only for 16 features chosen at random. The population would be if we had the time 
+for all the features developed.
 
 
+## c) Hypothesis
+The hypothesis is one tailed.
 
-## c)
+**h0**: mean(Time) <= 225 Hours \
+**h1**: mean(Time) > 225 Hours
 
-
-
-## d)
-```{r histplots, echo=FALSE}
+## d) Histogram
+```{r histplots, fig.show="hold", out.width="33%"}
 dbin<-data.frame(d1)
-ggplot(data = dbin, aes(x=d1))+
-  geom_histogram(binwidth = 50)+
-  labs(title='Histogram of a normal distribution', x='X', y='Number of occurences')
+histogram_with_bin <- function(bin_size) {
+  title<- paste("Histogram with Bin size = ", bin_size)
+  ggplot(data = dbin, aes(x=d1))+
+  geom_histogram(binwidth = bin_size)+
+  labs(title=title, x='Time to develop', y='Number of occurences')
+}
 
-ggplot(data = dbin, aes(x=d1))+
-  geom_histogram(binwidth = 75)+
-  labs(title='Histogram of a normal distribution', x='X', y='Number of occurences')
-
-ggplot(data = dbin, aes(x=d1))+
-  geom_histogram(binwidth = 100)+
-  labs(title='Histogram of a normal distribution', x='X', y='Number of occurences')
+histogram_with_bin(50)
+histogram_with_bin(75)
+histogram_with_bin(100)
 ```
 
-## e)
+Changing the amount of bins doesn't change the perspective drastically, but we can 
+observe that most of the values are concentrated between 200 and 250, using the bin size of 50.
+When we used bigger values we would assume that most values were between 100 and 300 which gives
+us much less precision on that.
 
-```{r qqPlot, echo=FALSE}
-car::qqPlot(d1)
+
+## e) qq-Plot
+
+```{r qqPlot}
+car::qqPlot(d1,main = 'qq-Plot Time to Develop', ylab= 'Time to develop')
 ```
 
-## f)
+## f) Shapiro-Wilk test
 
-```{r shapiroTest, echo=FALSE}
+```{r shapiroTest}
 shapiro.test(d1)
 ```
+Observing the QQ-plot of the data we can observe that data doesn't follow a normal
+distribution since there are points out of the 95% confidence interval that we are using
+in the plot. 
 
-## g)
+The Shapiro-Wilk test also reinforce this non-normality of the data since it's *W* 
+value is below 1. The p-value of 0.1708 is considered safe for this experiment since we
+don't have a huge sample.
+
+## g) One sample T-Test
+
+```{r ttest}
+t.test(d1, mu=225 ,conf.level=0.95)
+```
 
 
+# Exercise 2 - Performance
 
+## a) Descriptive Statistics
+```{r desc_statistics}
+psych::describeBy(df2$Time,df2$Group)
+```
+
+
+## b) Type of data
+```{r type_of_data}
+str(df2)
+
+df2$Group <- as.factor(df2$Group)
+df2$Time <- as.numeric(df2$Time)
+
+str(df2)
+```
+
+## c) Linear Model
+```{r linear_model}
+lm(Time ~ Group,df2)
+```
+
+## d) Is the factori "Group" statistically significant for this model?
+```{r ttest_group}
+t.test(formula = Time~Group,
+       data=df2, var.equal=T)
+```
