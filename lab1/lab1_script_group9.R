@@ -66,6 +66,7 @@ df2 <- read.csv(file = 'performance.csv',sep = ",")
 kable(df2)
 df2 <- pivot_longer(df2, cols=everything(), names_to="Group", values_to="Time")
 kable(df2)
+defaultDf2 <- df2
 # a
 psych::describeBy(df2$Time,df2$Group)
 
