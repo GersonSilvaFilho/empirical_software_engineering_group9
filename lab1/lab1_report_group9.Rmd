@@ -76,7 +76,8 @@ value is below 1, but the p-value is larger than alpha so we can't reject that t
 We are using a T-Test instead of a Z-Test because we have a sample size smaller than 30
 and we don't know the standard deviation of the population. We used a one sample T-Test since we have only one sample group in this experiment.
 
-The data follows the assumptions of a T-Tests since:\
+The data follows the assumptions of a T-Tests since:
+
 * It follows a continuous scale
 * We assumed that the data was collected randomly from the population
 * We assumed that the data is approximately normally distributed since we couldn't reject it using the Shapiro-Wilk test.
@@ -110,7 +111,9 @@ str(df2)
 
 ```
 
-* The numeric type is a number that measures a value.  
+Explanation for each data type:
+
+* The numeric type is a number that measures a value.
 * The categorical is a integer value connected to a set of characters.
 * The ordinal type is a number that represents the natural order of the elements without the indication of the relative size difference.
 
@@ -119,14 +122,15 @@ str(df2)
 lm(Time ~ Group,df2)
 ```
 
+The values observed in the linear model function were:
+
 * The value for the intercept (a) is 16 according to the function. 
 * The value of b is 0.01.
 * The value of X is 1 for the group original and 0 for group optimized.
 
 ## d) Is the factory "Group" statistically significant for this model?
 ```{r ttest_group}
-t.test(formula = Time~Group,
-       data=df2, var.equal=T)
+t.test(formula = Time~Group, data=df2, var.equal=T)
 ```
 
 The factor group is not statistically significant since the p value is larger than the alpha value.
@@ -134,12 +138,12 @@ The factor group is not statistically significant since the p value is larger th
 We can't say that time optimized is better than the original one based on our tests.
 
 
-```{r qqplot_2}
+```{r qqplot_2, fig.show="hold", out.width="50%", echo=FALSE}
 timeOriginal <- df2[df2$Group == "timeOriginal",]
-car::qqPlot(timeOriginal$Time, main = 'qq-Plot of perfor ', ylab= 'Time to develop')
+car::qqPlot(timeOriginal$Time, main = 'qq-Plot Time Original ', ylab= 'Time Original')
 
 timeOptimized <- df2[df2$Group == "timeOptimized",]
-car::qqPlot(timeOptimized$Time, main = 'qq-Plot of perfor ', ylab= 'Time to develop')
+car::qqPlot(timeOptimized$Time, main = 'qq-Plot Time Optimized ', ylab= 'Time Optimized')
 ```
 
 
