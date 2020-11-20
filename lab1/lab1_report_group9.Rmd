@@ -66,7 +66,7 @@ car::qqPlot(d1,main = 'qq-Plot Time to Develop', ylab= 'Time to develop')
 shapiro.test(d1)
 ```
 Observing the QQ-plot of the data we can see that it doesn't seem to follow a normal
-distribution since the residuals are not independent and there are points out of the 95% confidence interval that we are using in the plot. 
+distribution since the residuals are not independent. 
 
 The Shapiro-Wilk would also reinforce this non-normality of the data since it's *W* 
 value is below 1, but the p-value is larger than alpha so we can't reject that the data is normally distributed based on this test.
