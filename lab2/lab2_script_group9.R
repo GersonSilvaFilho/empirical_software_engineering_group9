@@ -1,0 +1,5 @@
+library(tidyverse)
+library(car)
+library(knitr)
+library(pwr)
+library(psych)
