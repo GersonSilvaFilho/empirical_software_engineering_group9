@@ -42,6 +42,9 @@ shapiro.test(df$Engagement)
 # qqPlots, looks normal.
 
 #e
+# We interpret the null hypothesis of the test as being if the data have homoscedasticity. 
+# Since the P-value is 0.93, it is larger than alpha and the null hypothesis can't be rejected.
+
 plot(lm)
 car::leveneTest(lm)
 
@@ -50,9 +53,33 @@ car::leveneTest(lm)
 # It's part of the design of the experiment, and should
 # be handled when data is collected.
 
+#g
+df2 <- read.csv(file = 'gotaflix-abn-modified.csv',sep = ",")
+df2$Cover <- as.factor(df2$Cover)
+df2$Engagement <- as.numeric(df2$Engagement)
+
+lm2 <- lm(Engagement ~ Cover,df2)
+plot(df2)
+car::leveneTest(lm2)
+
+# We interpret the null hypothesis of the test as being if the data have homoscedasticity. 
+# Since the P-value is very small, and much smaller than alpha, the null hypothesis can be rejected
+# and we can with confidence say that the data does not have homoscedasticity
 
 
+#h
+summary(lm)
+
+car::Anova(lm)
+# The model is statistically significant and we reject the hypothesis that the mean is equal for all groups.
+
+tuk <- TukeyHSD(aov(lm))
+plot(tuk)
+# We are confident that Cover C is better than A, B and D by looking plot of the Tukey test.
+# However, we can't say with confidence that C is better than E.
 
 
+# PART 2 Full factorial experiment
 
+# a
 
