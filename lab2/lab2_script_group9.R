@@ -75,7 +75,7 @@ car::Anova(lm)
 
 tuk <- TukeyHSD(aov(lm))
 plot(tuk)
-# We are confident that Cover C is better than A, B and D by looking plot of the Tukey test.
+# We are confident that Cover C is better than A, B and D by looking at the plot of the Tukey test.
 # However, we can't say with confidence that C is better than E.
 
 
