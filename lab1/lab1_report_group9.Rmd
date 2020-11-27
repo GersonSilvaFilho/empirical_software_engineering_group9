@@ -28,7 +28,7 @@ for all the features developed.
 
 
 ## c) Hypothesis
-The hypothesis is one tailed because we are only looking in one direction. 
+The hypothesis is one tailed because we are only looking in one direction. Our alternative hypothesis is that the mean of development time is larger than 225 hours. This is the reason we formulate our null hypothesis this way.
 
 **h0**: mean(Time) <= 225 Hours \
 **h1**: mean(Time) > 225 Hours
@@ -89,7 +89,7 @@ t.test(d1, mu=225 , alternative = 'greater' ,conf.level=0.95)
 As seen in the test output the confidence interval is between 208 to infinity.
 
 Based on the T-Test we can't reject the null hypothesis that the time to develop is
-less than 225 because the p-value is larger than the alpha value.
+less than 225 because the p-value is larger than the alpha value. However, the mean of the samples is 244 which indicates that the time to develop might be larger than 225. 
 
 
 # Exercise 2 - Performance
