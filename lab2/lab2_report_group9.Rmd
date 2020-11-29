@@ -1,0 +1,65 @@
+---
+title: "Empirical software engineering"
+subtitle: |
+  | Lab 2: ANOVA
+  | Group 9
+output:
+  pdf_document
+author:
+  - Anton Lutteman
+  - Daniel Olsson
+  - Gerson Silva Filho
+  - Johan Mejborn
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+# Exercise 1 - Time to Develop
+
+## a) Minimum amount of users
+```{r 1_a}
+pwr.anova.test(k = 5, n = NULL, f = 0.08, sig.level = 0.05, power = 0.90)
+```
+
+## b) Descriptive Statistics
+```{r 1_b}
+df <- read.csv(file = 'gotaflix-abn.csv',sep = ",")
+df$Cover <- as.factor(df$Cover)
+df$Engagement <- as.numeric(df$Engagement)
+
+psych::describeBy(df$Engagement,list(df$Cover), mat=T)
+```
+
+
+## c) Linear Model
+
+
+## d) Normality
+
+
+## e) Scatter plot
+
+
+## f) Independence Assumption
+
+
+## g) Homoscedasticity
+
+
+## g) Which art cover had a better engagement?
+
+
+
+# Exercise 2 - Full Factorial Experiment
+
+## a) Experimental Groups
+
+
+## b) Linear model equation
+
+
+## c) ANOVA assumptions
+
+
+## d) ANOVA table
+
+
