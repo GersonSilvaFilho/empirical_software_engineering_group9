@@ -20,6 +20,16 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 pwr.anova.test(k = 5, n = NULL, f = 0.08, sig.level = 0.05, power = 0.90)
 ```
 
+According to the ANOVA test the amount of users in each group is **483** for the
+experiment have power 0.9. The minimum amount of monthly users that the company 
+must have is 2415, which is 5 (the number of groups) times the amount of users in
+each group. 
+
+The effect size is inversely proportional to the number of users needed for the test. 
+If we accept a larger effect the number of users needed shrinks, with this
+power and significance levels. On the other hand, if we make the effect 
+smaller we need a higher number of users to this significance level and power.
+
 ## b) Descriptive Statistics
 ```{r 1_b}
 df <- read.csv(file = 'gotaflix-abn.csv',sep = ",")
@@ -31,23 +41,84 @@ psych::describeBy(df$Engagement,list(df$Cover), mat=T)
 
 
 ## c) Linear Model
+```{r 1_c}
+lm <- lm(Engagement ~ Cover,df)
+```
 
+Equation that represents the model:
+\begin{equation}
+C = 1 -> 0.160367 + 0.017948
+\end{equation}
+
+The intercept, in this case, represents the **Cover A**. 
+
+If the the model gives only **Cover C** as 1, it means that it's the reference 
+for all the other covers.
 
 ## d) Normality
+```{r 1_d_1}
+car::qqPlot(Engagement ~ Cover,df)
+```
 
+With this plots is a bit hard to be sure about the normality, but there are no 
+reason to believe the opposite.
+
+```{r 1_d_2}
+car::qqPlot(lm$residuals)
+```
+
+Also the plot of the residuals look ok, but the data visualization is a bit hard.
+
+```{r 1_d_3}
+shapiro.test(df$Engagement)
+```
+
+Using the Shapiro Wilk test we can believe that the data follows a normal distribution
+sing the W value is 1 and p-value is bigger than alpha.
 
 ## e) Scatter plot
+
+```{r 1_e , fig.show="hold", out.width="50%"}
+plot(lm)
+car::leveneTest(lm)
+```
+
+We interpret the null hypothesis of the test as being if the data have homoscedasticity. 
+Since the P-value is 0.93, it is larger than alpha and the null hypothesis can't be rejected.
 
 
 ## f) Independence Assumption
 
+There is no test that can run to verify the independence of the data. It's part of 
+the design of the experiment and should be handled in the collection phase.
 
-## g) Homoscedasticity
+## g) Homoscedasticity analysis modified data - CHECK PLOT ARGUMENTS <<<<<<<<<<<<<<<<<
 
+```{r 1_g , fig.show="hold", out.width="50%"}
+plot(lm2) 
+car::leveneTest(lm2)
+```
 
-## g) Which art cover had a better engagement?
+We interpret the null hypothesis of the test as being if the data have homoscedasticity.
+Since the P-value is very small, and much smaller than alpha, the null hypothesis can be rejected
+and we can say with confidence that the data **does not have homoscedasticity.**
 
+## h) Which art cover had a better engagement?
 
+```{r 1_h_1}
+summary(lm)
+car::Anova(lm)
+```
+
+The model is statistically significant and we reject the hypothesis that the mean is equal for all groups.
+
+```{r 1_h_2}
+tuk <- TukeyHSD(aov(lm))
+plot(tuk)
+```
+
+We are confident that Cover C is better than A, B and D by looking at the plot of the Tukey test.
+However, we can't say with confidence that C is better than E.
 
 # Exercise 2 - Full Factorial Experiment
 
