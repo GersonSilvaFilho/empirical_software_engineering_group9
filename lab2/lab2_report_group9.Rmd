@@ -12,7 +12,6 @@ author:
   - Johan Mejborn
 date: "`r format(Sys.time(), '%d %B %Y')`"
 ---
-
 # Exercise 1 - Time to Develop
 
 ## a) Minimum amount of users
@@ -132,5 +131,15 @@ However, we can't say with confidence that C is better than E.
 
 
 ## d) ANOVA table
+# We can talk about formatting this tomorrow :)
+#```{r star, results = "asis"}
+# library(stargazer)
+#df3 <- read.csv(file = 'gotaflix-2wayANOVA.csv',sep = ",")
+#df3$Engagement <- as.numeric(df3$Engagement)
+#df3$Cover <- as.factor(df3$Cover)
+#df3$Summary <- as.factor(df3$Summary)
+#lm5 <- lm(Engagement ~ Cover*Summary, df3)
+#stargazer::stargazer(lm5, header = F)
+#```
 
 
