@@ -1,0 +1,29 @@
+---
+title: "Empirical software engineering"
+subtitle: |
+  | Lab 3: Design and simulate an experiment
+  | Group 9
+output:
+  pdf_document
+author:
+  - Anton Lutteman
+  - Daniel Olsson
+  - Gerson Silva Filho
+  - Johan Mejborn
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+# Simulate the data
+
+## 1) Simulate for a the sample size per group that you defined in the power analysis.
+
+### a) How does your fitted model looks like?
+
+### b) How do it compare with your ‘true’ model you defined in the simulation.
+
+## 2) Simulate for an underpowered study with half the sample size you calculated in the power analysis
+
+### a) How does your fitted model looks like?
+
+### b) How do it compare with your ‘true’ model you defined in the simulation
+
+### c) How do the results change compared to the correctly powered experiment.
