@@ -2,24 +2,24 @@ library(rmarkdown)
 
 N<-1000
 
-amount_of_code_model <- function(N, X_lang, X_ide, X_experience, likert=T) { 
+amount_of_code_model <- function(N, X_lang, X_ide, X_experience) { 
   
   ref <- 100 #Intercept/reference group. This is java, intelij and junior
 
   #main effects
-  lang_cpp <- 0.2
-  lang_python <- 1.5
+  lang_cpp <- 50
+  lang_python <- -30
   
-  ide_visual_studio <- 1.2 
+  ide_visual_studio <- -10 
   
-  xp_senior <- 2.0 
+  xp_senior <- 60
   
   # second order interactions
-  lang_cpp_ide_visual_studio <- 1.0  
-  lang_python_ide_visual_studio <- 1.0  
-  lang_python_xp_senior <- 0.0 
-  lang_cpp_xp_senior <- 2.0
-  ide_visual_studio_xp_senior <- 1.5
+  lang_cpp_ide_visual_studio <- -1.0  
+  lang_python_ide_visual_studio <- 0.0  
+  lang_python_xp_senior <- 5.0 
+  lang_cpp_xp_senior <- 10.0
+  ide_visual_studio_xp_senior <- 3.0
 
   
   #third order interactions
@@ -34,7 +34,7 @@ amount_of_code_model <- function(N, X_lang, X_ide, X_experience, likert=T) {
   
   x_senior <- X_experience[1]
 
-  response_std <- 1.0
+  response_std <- 20.0
 
   #This is the linear model that controls the response variable
 
@@ -55,7 +55,7 @@ amount_of_code_model <- function(N, X_lang, X_ide, X_experience, likert=T) {
     
     y_out<- rnorm(N, mean=y, sd = response_std) # This generates a normal distribution 
   
-  #if(likert)
+  # if(likert)
   #  y_out<- findInterval(y_out,vec=c(-Inf,-2.5,-1, 1,2.5,Inf)+ref) 
   
   # this is fairly unbiased for standard deviation of 1 in the responses and 0 mean. 
@@ -159,4 +159,6 @@ summary(m1)
 
 # car::qqPlot(m1)
 
+
+car::leveneTest(m1)
 
