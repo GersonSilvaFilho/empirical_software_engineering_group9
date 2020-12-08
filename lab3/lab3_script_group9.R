@@ -1,5 +1,6 @@
 library(rmarkdown)
 
+N<-1000
 
 amount_of_code_model <- function(N, X_lang, X_ide, X_experience, likert=T) { 
   
@@ -62,3 +63,100 @@ amount_of_code_model <- function(N, X_lang, X_ide, X_experience, likert=T) {
   # Here the reference will have a mean of 3 in likert scale
   return(y_out)
 }
+
+
+set.seed(8649)
+
+language_java <- c(0,0) 
+language_cpp <- c(1,0) 
+language_python <- c(0,1)
+
+i_itelij <- c(0)
+i_visual_studio <- c(1)
+
+experience_junior <- c(0) 
+experience_senior <- c(1)
+
+g1 <- data.frame(
+  Language= rep('Java', N), IDE= rep('Intelij', N), Experience=rep('Junior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_java , X_ide = i_itelij, X_experience = experience_junior)
+)
+
+g2 <- data.frame(
+  Language= rep('C++', N), IDE= rep('Intelij', N), Experience=rep('Junior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_cpp , X_ide = i_itelij, X_experience = experience_junior)
+)
+
+g3 <- data.frame(
+  Language= rep('Python', N), IDE= rep('Intelij', N), Experience=rep('Junior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_python , X_ide = i_itelij, X_experience = experience_junior)
+)
+
+g4 <- data.frame(
+  Language= rep('Java', N), IDE= rep('Visual Studio', N), Experience=rep('Junior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_java , X_ide = i_visual_studio, X_experience = experience_junior)
+)
+
+g5 <- data.frame(
+  Language= rep('C++', N), IDE= rep('Visual Studio', N), Experience=rep('Junior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_cpp , X_ide = i_visual_studio, X_experience = experience_junior)
+)
+
+g6 <- data.frame(
+  Language= rep('Python', N), IDE= rep('Visual Studio', N), Experience=rep('Junior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_python , X_ide = i_visual_studio, X_experience = experience_junior)
+)
+
+g7 <- data.frame(
+  Language= rep('Java', N), IDE= rep('Intelij', N), Experience=rep('Senior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_java , X_ide = i_itelij, X_experience = experience_senior)
+)
+
+g8 <- data.frame(
+  Language= rep('C++', N), IDE= rep('Intelij', N), Experience=rep('Senior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_cpp , X_ide = i_itelij, X_experience = experience_senior)
+)
+
+g9 <- data.frame(
+  Language= rep('Python', N), IDE= rep('Intelij', N), Experience=rep('Senior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_python , X_ide = i_itelij, X_experience = experience_senior)
+)
+
+g10 <- data.frame(
+  Language= rep('Java', N), IDE= rep('Visual Studio', N), Experience=rep('Senior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_java , X_ide = i_visual_studio, X_experience = experience_senior)
+)
+
+g11 <- data.frame(
+  Language= rep('C++', N), IDE= rep('Visual Studio', N), Experience=rep('Senior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_cpp , X_ide = i_visual_studio, X_experience = experience_senior)
+)
+
+g12 <- data.frame(
+  Language= rep('Python', N), IDE= rep('Visual Studio', N), Experience=rep('Senior', N), 
+  y=amount_of_code_model(N=N, X_lang =language_python , X_ide = i_visual_studio, X_experience = experience_senior)
+)
+
+n<-20
+all_groups <- list(g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12)
+
+#creating an empty data frame from an existing one (with the same column)
+d<-g1[0,]
+for(g in all_groups) {
+  d<-rbind(d, dplyr::sample_n(g, size=n)) #appending rows at the end for every group 
+}
+
+d$Language<-as.factor(d$Language) 
+d$IDE<-as.factor(d$IDE) 
+d$Experience<-as.factor(d$Experience)
+
+levels(d$Language) <- c("Java", "C++", "Python")
+levels(d$IDE) <- c("Intelij", "Visual Studio")
+levels(d$Experience) <- c("Junior", "Senior")
+
+m1 <- lm(y ~ Language*IDE*Experience, data=d)
+summary(m1)
+
+# car::qqPlot(m1)
+
+
