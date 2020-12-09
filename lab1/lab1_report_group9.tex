@@ -110,7 +110,7 @@
 \subtitle{Lab 1: Descriptive statistics, regression and hypothesis testing\\
 Group 9}
 \author{Anton Lutteman \and Daniel Olsson \and Gerson Silva Filho \and Johan Mejborn}
-\date{16 November 2020}
+\date{09 December 2020}
 
 \begin{document}
 \maketitle
@@ -139,7 +139,10 @@ features developed.
 \hypertarget{c-hypothesis}{%
 \subsection{c) Hypothesis}\label{c-hypothesis}}
 
-The hypothesis is one tailed.
+The hypothesis is one tailed because we are only looking in one
+direction. Our alternative hypothesis is that the mean of development
+time is larger than 225 hours. This is the reason we formulate our null
+hypothesis this way.
 
 \textbf{h0}: mean(Time) \textless= 225 Hours\\
 \textbf{h1}: mean(Time) \textgreater{} 225 Hours
@@ -205,20 +208,38 @@ less precision on that.
 ## W = 0.92033, p-value = 0.1708
 \end{verbatim}
 
-Observing the QQ-plot of the data we can observe that data doesn't
-follow a normal distribution since there are points out of the 95\%
-confidence interval that we are using in the plot.
+Observing the QQ-plot of the data we can see that it doesn't seem to
+follow a normal distribution since the residuals are not independent.
 
-The Shapiro-Wilk test also reinforce this non-normality of the data
-since it's \emph{W} value is below 1. The p-value of 0.1708 is
-considered safe for this experiment since we don't have a huge sample.
+The Shapiro-Wilk would also reinforce this non-normality of the data
+since it's \emph{W} value is below 1, but the p-value is larger than
+alpha so we can't reject that the data is normally distributed based on
+this test.
 
 \hypertarget{g-one-sample-t-test}{%
 \subsection{g) One sample T-Test}\label{g-one-sample-t-test}}
 
+We are using a T-Test instead of a Z-Test because we have a sample size
+smaller than 30 and we don't know the standard deviation of the
+population. We used a one sample T-Test since we have only one sample
+group in this experiment.
+
+The data follows the assumptions of a T-Tests since:
+
+\begin{itemize}
+\tightlist
+\item
+  It follows a continuous scale
+\item
+  We assumed that the data was collected randomly from the population
+\item
+  We assumed that the data is approximately normally distributed since
+  we couldn't reject it using the Shapiro-Wilk test.
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{t.test}\NormalTok{(d1, }\DataTypeTok{mu=}\DecValTok{225}\NormalTok{ ,}\DataTypeTok{conf.level=}\FloatTok{0.95}\NormalTok{)}
+\KeywordTok{t.test}\NormalTok{(d1, }\DataTypeTok{mu=}\DecValTok{225}\NormalTok{ , }\DataTypeTok{alternative =} \StringTok{'greater'}\NormalTok{ ,}\DataTypeTok{conf.level=}\FloatTok{0.95}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -227,14 +248,22 @@ considered safe for this experiment since we don't have a huge sample.
 ##  One Sample t-test
 ## 
 ## data:  d1
-## t = 0.94049, df = 15, p-value = 0.3619
-## alternative hypothesis: true mean is not equal to 225
+## t = 0.94049, df = 15, p-value = 0.1809
+## alternative hypothesis: true mean is greater than 225
 ## 95 percent confidence interval:
-##  200.1484 289.1016
+##  208.0444      Inf
 ## sample estimates:
 ## mean of x 
 ##   244.625
 \end{verbatim}
+
+As seen in the test output the confidence interval is between 208 to
+infinity.
+
+Based on the T-Test we can't reject the null hypothesis that the time to
+develop is less than 225 because the p-value is larger than the alpha
+value. However, the mean of the samples is 244 which indicates that the
+time to develop might be larger than 225.
 
 \hypertarget{exercise-2---performance}{%
 \section{Exercise 2 - Performance}\label{exercise-2---performance}}
@@ -265,13 +294,13 @@ considered safe for this experiment since we don't have a huge sample.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{str}\NormalTok{(df2)}
+\KeywordTok{str}\NormalTok{(defaultDf2)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ## tibble [20 x 2] (S3: tbl_df/tbl/data.frame)
-##  $ Group: Factor w/ 2 levels "timeOptimized",..: 2 1 2 1 2 1 2 1 2 1 ...
+##  $ Group: chr [1:20] "timeOriginal" "timeOptimized" "timeOriginal" "timeOptimized" ...
 ##  $ Time : num [1:20] 16 16 16 16 16 ...
 \end{verbatim}
 
@@ -289,6 +318,19 @@ considered safe for this experiment since we don't have a huge sample.
 ##  $ Group: Factor w/ 2 levels "timeOptimized",..: 2 1 2 1 2 1 2 1 2 1 ...
 ##  $ Time : num [1:20] 16 16 16 16 16 ...
 \end{verbatim}
+
+Explanation for each data type:
+
+\begin{itemize}
+\tightlist
+\item
+  The numeric type is a number that measures a value.
+\item
+  The categorical is a integer value connected to a set of characters.
+\item
+  The ordinal type is a number that represents the natural order of the
+  elements without the indication of the relative size difference.
+\end{itemize}
 
 \hypertarget{c-linear-model}{%
 \subsection{c) Linear Model}\label{c-linear-model}}
@@ -309,15 +351,26 @@ considered safe for this experiment since we don't have a huge sample.
 ##             16.00               0.01
 \end{verbatim}
 
-\hypertarget{d-is-the-factori-group-statistically-significant-for-this-model}{%
-\subsection{d) Is the factori ``Group'' statistically significant for
+The values observed in the linear model function were:
+
+\begin{itemize}
+\tightlist
+\item
+  The value for the intercept (a) is 16 according to the function.
+\item
+  The value of b is 0.01.
+\item
+  The value of X is 1 for the group original and 0 for group optimized.
+\end{itemize}
+
+\hypertarget{d-is-the-factory-group-statistically-significant-for-this-model}{%
+\subsection{d) Is the factory ``Group'' statistically significant for
 this
-model?}\label{d-is-the-factori-group-statistically-significant-for-this-model}}
+model?}\label{d-is-the-factory-group-statistically-significant-for-this-model}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{t.test}\NormalTok{(}\DataTypeTok{formula =}\NormalTok{ Time}\OperatorTok{~}\NormalTok{Group,}
-       \DataTypeTok{data=}\NormalTok{df2, }\DataTypeTok{var.equal=}\NormalTok{T)}
+\KeywordTok{t.test}\NormalTok{(}\DataTypeTok{formula =}\NormalTok{ Time}\OperatorTok{~}\NormalTok{Group, }\DataTypeTok{data=}\NormalTok{df2, }\DataTypeTok{var.equal=}\NormalTok{T)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -334,5 +387,25 @@ model?}\label{d-is-the-factori-group-statistically-significant-for-this-model}}
 ## mean in group timeOptimized  mean in group timeOriginal 
 ##                      16.005                      16.015
 \end{verbatim}
+
+The factor group is not statistically significant since the p value is
+larger than the alpha value.
+
+We can't say that time optimized is better than the original one based
+on our tests.
+
+\begin{verbatim}
+## [1] 4 6
+\end{verbatim}
+
+\begin{verbatim}
+## [1] 5 4
+\end{verbatim}
+
+\includegraphics[width=0.5\linewidth]{lab1_report_group9_files/figure-latex/qqplot_2-1}
+\includegraphics[width=0.5\linewidth]{lab1_report_group9_files/figure-latex/qqplot_2-2}
+
+Based on the qq-plots the data fulfills the assumptions for the linear
+regression model.
 
 \end{document}

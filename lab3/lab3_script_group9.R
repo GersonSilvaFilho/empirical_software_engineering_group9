@@ -10,21 +10,21 @@ amount_of_code_model <- function(N, X_lang, X_ide, X_experience) {
   lang_cpp <- 50
   lang_python <- -30
   
-  ide_visual_studio <- -10 
+  ide_visual_studio <- -10
   
-  xp_senior <- 60
+  xp_senior <- 30
   
   # second order interactions
-  lang_cpp_ide_visual_studio <- -1.0  
-  lang_python_ide_visual_studio <- 0.0  
-  lang_python_xp_senior <- 5.0 
-  lang_cpp_xp_senior <- 10.0
-  ide_visual_studio_xp_senior <- 3.0
+  lang_cpp_ide_visual_studio <- 20  
+  lang_python_ide_visual_studio <- -20  
+  lang_python_xp_senior <- 10 
+  lang_cpp_xp_senior <- 10
+  ide_visual_studio_xp_senior <- 20
 
   
   #third order interactions
-  lang_cpp_xp_senior_ide_visual_studio <- 1.0 
-  lang_python_xp_senior_ide_visual_studio <- 0.0 
+  lang_cpp_xp_senior_ide_visual_studio <- 10
+  lang_python_xp_senior_ide_visual_studio <- -15 
 
   #input
   x_lang_cpp <- X_lang[1]
@@ -34,25 +34,22 @@ amount_of_code_model <- function(N, X_lang, X_ide, X_experience) {
   
   x_senior <- X_experience[1]
 
-  response_std <- 20.0
+  response_std <- 0.0
 
   #This is the linear model that controls the response variable
 
-  y <- ref +
-    lang_cpp * x_lang_cpp +
-    lang_python * x_lang_python +
-    ide_visual_studio  * x_ide_visual_studio +
-    xp_senior * x_senior +
-    
+  y <- ref+ lang_cpp*x_lang_cpp+lang_python*x_lang_python +
+     ide_visual_studio  * x_ide_visual_studio +
+     xp_senior * x_senior +
     lang_cpp_ide_visual_studio * x_lang_cpp * x_ide_visual_studio +
     lang_python_ide_visual_studio * x_lang_python *x_ide_visual_studio +
     lang_python_xp_senior * x_lang_python * x_senior +
     lang_cpp_xp_senior * x_lang_cpp * x_senior +
     ide_visual_studio_xp_senior * x_senior * x_ide_visual_studio +
-    
+
     lang_cpp_xp_senior_ide_visual_studio * x_lang_cpp * x_ide_visual_studio * x_senior +
-    lang_python_xp_senior_ide_visual_studio * x_lang_python * x_ide_visual_studio * x_senior 
-    
+    lang_python_xp_senior_ide_visual_studio * x_lang_python * x_ide_visual_studio * x_senior
+
     y_out<- rnorm(N, mean=y, sd = response_std) # This generates a normal distribution 
   
   # if(likert)
@@ -137,7 +134,7 @@ g12 <- data.frame(
   y=amount_of_code_model(N=N, X_lang =language_python , X_ide = i_visual_studio, X_experience = experience_senior)
 )
 
-n<-20
+n<-8
 all_groups <- list(g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12)
 
 #creating an empty data frame from an existing one (with the same column)
@@ -149,8 +146,8 @@ for(g in all_groups) {
 d$Language<-as.factor(d$Language) 
 d$IDE<-as.factor(d$IDE) 
 d$Experience<-as.factor(d$Experience)
-
-levels(d$Language) <- c("Java", "C++", "Python")
+d <- within(d, Language <- relevel(Language,ref=2))
+levels(d$Language) <- c("Java","C++", "Python")
 levels(d$IDE) <- c("Intelij", "Visual Studio")
 levels(d$Experience) <- c("Junior", "Senior")
 
