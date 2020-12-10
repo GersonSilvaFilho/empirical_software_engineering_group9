@@ -1,5 +1,11 @@
+library(tidyverse)
+library(car)
+library(knitr)
+library(pwr)
+library(psych)
 library(rmarkdown)
-
+library(zoom)
+library(stargazer)
 N<-1000
 
 amount_of_code_model <- function(N, X_lang, X_ide, X_experience) { 
@@ -34,7 +40,7 @@ amount_of_code_model <- function(N, X_lang, X_ide, X_experience) {
   
   x_senior <- X_experience[1]
 
-  response_std <- 0.0
+  response_std <- 20
 
   #This is the linear model that controls the response variable
 
@@ -152,10 +158,109 @@ levels(d$IDE) <- c("Intelij", "Visual Studio")
 levels(d$Experience) <- c("Junior", "Senior")
 
 m1 <- lm(y ~ Language*IDE*Experience, data=d)
+
 summary(m1)
 
-# car::qqPlot(m1)
-
-
+# 1 
+# a)
+# Test Assumption 1 Homoscedasticity. The result show that we cannot reject homoscedasticity.
+# QQplot shows that the data is homoscedastic.
 car::leveneTest(m1)
+car::qqPlot(m1)
+# Test Assumtion 2 Normality. The result show that we cannot reject normallity.
+# QQplot on the residuals shows normallity.
+shapiro.test(m1$residuals)
+car::qqPlot(m1$residuals)
+# Assumption 3 Independence. Based on how we collected the data we can assume independence.
+
+# The Analysis
+
+# The anova test shows that we can reject that Language, Experience, Language:IDE, Language:Experience and
+# IDE:Experience has the same mean for the levels because of the low p values.
+# Hypothesis 1: IDE alone doesn't seem to have an effect on LOC but we can see that it has a
+# significant effect in combination with Language and Experience.
+# Hypothesis 2: Experience seem to have a significant effect on LOC based on the result.
+# Hypothesis 3: Language seem to have a significant effect on LOC bases on the result.
+car::Anova(m1)
+
+# Without drawing conclusions for all combinations presented by the Tukey test we can say that
+# the highest combination for LOC is Language = C++, IDE = Visual Studio and Experience = Senior.
+TukeyHSD(aov(m1))
+
+
+#b
+# We are comparing the model we created (y) in the function with m1.
+# Model looks similar with some variations in the estimates. This could
+# be explained by the standard deviation we decided upon or that m1 interpreted
+# the data in another way than what we set up. The difference in the first order
+# is very small compared to our true model, however the third order interactions are
+# deviating quite a bit compared to our true model. Maybe two tables side by side for
+# comparison.
+
+
+#2
+# a)
+n2 <- 4
+d2<-g1[0,]
+for(g in all_groups) {
+  d2<-rbind(d2, dplyr::sample_n(g, size=n2)) #appending rows at the end for every group 
+}
+
+d2$Language<-as.factor(d2$Language) 
+d2$IDE<-as.factor(d2$IDE) 
+d2$Experience<-as.factor(d2$Experience)
+d2 <- within(d2, Language <- relevel(Language,ref=2))
+levels(d2$Language) <- c("Java","C++", "Python")
+levels(d2$IDE) <- c("Intelij", "Visual Studio")
+levels(d2$Experience) <- c("Junior", "Senior")
+
+m2 <- lm(y ~ Language*IDE*Experience, data=d2)
+summary(m2)
+# Test Assumption 1 Homoscedasticity. The result show that we cannot reject homoscedasticity.
+# QQplot shows that the data is homoscedastic.
+car::leveneTest(m2)
+car::qqPlot(m2)
+
+# Test Assumtion 2 Normality. The result show that we cannot reject normallity.
+# QQplot on the residuals shows normallity.
+shapiro.test(m2$residuals)
+car::qqPlot(m2$residuals)
+# Assumption 3 Independence. Based on how we collected the data we can assume independence.
+
+
+# The Analysis
+
+# Running the anova test on m2 (smaller sample size model) shows that we can only reject that
+# the means are equal for Language and Experience.
+# Hypothesis 1: IDE doesn't seem to have an effect on LOC neither alone nor as an interaction.
+# Hypothesis 2: Experience seem to have a significant effect on LOC based on the result.
+# Hypothesis 3: Language seem to have a significant effect on LOC bases on the result.
+car::Anova(m2)
+
+
+# Tukey test shows that the highest combination for LOC is Language = C++ and Experience = Senior.
+TukeyHSD(aov(m2))
+
+
+
+#b
+# We are comparing the model we created (y) in the function with m2.
+# Model looks similar with some variations in the estimates. This could
+# be explained by the standard deviation we decided upon or that m1 interpreted
+# the data in another way than what we set up. The difference in the first order
+# is very small compared to our true model, however the third order interactions are
+# deviating quite a bit compared to our true model. Maybe two tables side by side for
+# comparison.
+
+#c
+# m1 vs m2, When we compare the two models we see some differences between them.
+# These could be explained by the standard deviation and the small sample size.
+# We also get more coefficients with small p values that are to be considered 
+# statistically significant for m1.
+
+# Comparing the analysis on the two models show similar result for Hypothesis 2 and 3 but
+# for model two we do not see an interaction effect for IDE. This means we can't reject the null
+# hypothesis for hypothesis 1 that the means are equal for the different IDEs.
+
+
 
