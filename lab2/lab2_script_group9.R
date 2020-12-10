@@ -4,7 +4,6 @@ library(knitr)
 library(pwr)
 library(psych)
 library(rmarkdown)
-library(zoom)
 library(stargazer)
 
 #a
@@ -129,7 +128,7 @@ plot(tuk)
 
 # The effect size 
 pwr.anova.test(k = 4, n = 800, f = NULL, sig.level = 0.05, power = 0.90)
-#render('lab2_report_group9.Rmd')
+render('lab2_report_group9.Rmd')
 
 
 
