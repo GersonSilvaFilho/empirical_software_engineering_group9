@@ -8,29 +8,34 @@ library(zoom)
 library(stargazer)
 N<-1000
 
+ref <- 100
+
+#main effects
+lang_cpp <- 50
+lang_python <- -30
+
+ide_visual_studio <- -10
+
+xp_senior <- 30
+
+# second order interactions
+lang_cpp_ide_visual_studio <- 20  
+lang_python_ide_visual_studio <- -20  
+lang_cpp_xp_senior <- 10
+lang_python_xp_senior <- 10 
+ide_visual_studio_xp_senior <- 20
+
+
+#third order interactions
+lang_cpp_xp_senior_ide_visual_studio <- 10
+lang_python_xp_senior_ide_visual_studio <- -15 
+
+facDefinition <- c(ref, lang_cpp, lang_python, ide_visual_studio, xp_senior, 
+                   lang_cpp_ide_visual_studio, lang_python_ide_visual_studio, 
+                   lang_cpp_xp_senior, lang_python_xp_senior, ide_visual_studio_xp_senior,
+                   lang_cpp_xp_senior_ide_visual_studio, lang_python_xp_senior_ide_visual_studio)
+
 amount_of_code_model <- function(N, X_lang, X_ide, X_experience) { 
-  
-  ref <- 100 #Intercept/reference group. This is java, intelij and junior
-
-  #main effects
-  lang_cpp <- 50
-  lang_python <- -30
-  
-  ide_visual_studio <- -10
-  
-  xp_senior <- 30
-  
-  # second order interactions
-  lang_cpp_ide_visual_studio <- 20  
-  lang_python_ide_visual_studio <- -20  
-  lang_python_xp_senior <- 10 
-  lang_cpp_xp_senior <- 10
-  ide_visual_studio_xp_senior <- 20
-
-  
-  #third order interactions
-  lang_cpp_xp_senior_ide_visual_studio <- 10
-  lang_python_xp_senior_ide_visual_studio <- -15 
 
   #input
   x_lang_cpp <- X_lang[1]
@@ -262,5 +267,5 @@ TukeyHSD(aov(m2))
 # for model two we do not see an interaction effect for IDE. This means we can't reject the null
 # hypothesis for hypothesis 1 that the means are equal for the different IDEs.
 
-
-
+tableData = data.frame(facDefinition, coef(summary(m1))[, "Estimate"]) 
+kable(tableData, col.names = c("Defined Coeficients", "Model Coeficients"))
