@@ -41,7 +41,7 @@ psych::describeBy(df$Engagement,list(df$Cover), mat=T)
 
 ## c) Linear Model
 ```{r 1_c}
-lm <- lm(Engagement ~ Cover,df)
+lm(Engagement ~ Cover,df)
 ```
 
 Equation that represents the model:
@@ -51,8 +51,7 @@ C = 1 -> 0.160367 + 0.017948
 
 The intercept, in this case, represents the **Cover A**. 
 
-If the the model gives only **Cover C** as 1, it means that it's the reference 
-for all the other covers.
+If the model gives only **Cover C** as 1, it means that it's the mean value of Cover C.
 
 ## d) Normality
 ```{r 1_d_1}
@@ -66,14 +65,14 @@ reason to believe the opposite.
 car::qqPlot(lm$residuals)
 ```
 
-Also the plot of the residuals look ok, but the data visualization is a bit hard.
+Also the plot of the residuals indicates normality, but the data visualization is a bit hard.
 
 ```{r 1_d_3}
 shapiro.test(df$Engagement)
 ```
 
 Using the Shapiro Wilk test we can believe that the data follows a normal distribution
-sing the W value is 1 and p-value is bigger than alpha.
+sing the W value is 1 and p-value is bigger than alpha. Both the plot and the Shapiro Wilk test give the same indication of normality.
 
 ## e) Scatter plot
 
@@ -179,7 +178,7 @@ stargazer::stargazer(car::Anova(lm5),summary = F, header = F)
 
 The conclusion that we draw from the ANOVA table is that the Cover and the Interaction were statistically significant. The effect sizes of each value can be seen in Table 1 F Value column.
 
-```{r 2_d_2, results='hide'}
+```{r 2_d_2}
 TukeyHSD(aov(lm5))
 ```
 
