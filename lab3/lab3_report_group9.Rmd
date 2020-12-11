@@ -12,6 +12,10 @@ author:
   - Johan Mejborn
 date: "`r format(Sys.time(), '%d %B %Y')`"
 ---
+
+# OSF experiment registration: https://osf.io/4yxas
+
+
 # Simulate the data
 
 ## 1) Simulate for a the sample size per group that you defined in the power analysis.
@@ -32,9 +36,9 @@ The result show that we cannot reject homoscedasticity. Then let's also verify t
 car::qqPlot(m1)
 ```
 
-QQplot shows that the data is homoscedastic.
+QQplot shows that we cannot reject that the data is homoscedastic.
 
-* **Test Assumtion 2 - Normality**
+* **Test Assumption 2 - Normality**
 
 In order to verify normality we run a Shapiro Wilk test.
 
@@ -42,16 +46,16 @@ In order to verify normality we run a Shapiro Wilk test.
 shapiro.test(m1$residuals)
 ```
 
-The result show that we cannot reject normallity. And in order to verify it graphically we used
+The result show that we cannot reject normality. And in order to verify it graphically we used
 the QQ-plot of the residuals.
 
 ```{r 1_q_4}
 car::qqPlot(m1$residuals)
 ```
 
-The QQplot on the residuals shows normallity.
+The QQplot on the residuals shows normality.
 
-* **Test Assumtion 3 - Independence**
+* **Test Assumption 3 - Independence**
 
 Based on how we collected the data, we can assume independence.
 
@@ -66,6 +70,8 @@ car::Anova(m1)
 The ANOVA test shows that we can reject that Language, Experience, Language:IDE,
 Language:Experience and IDE:Experience has the same mean for the levels because 
 of the low p values.
+
+So our conclusions on the experiment hypothesis are:
 
 **Hypothesis 1**: IDE alone doesn't seem to have an effect on LOC but we can see that it has a
 significant effect in combination with Language and Experience. 
@@ -114,9 +120,9 @@ The result show that we cannot reject homoscedasticity. Then let's also verify t
 car::qqPlot(m2)
 ```
 
-QQplot shows that the data is homoscedastic.
+QQplot shows that we cannot reject that the data is homoscedastic.
 
-* **Test Assumtion 2 - Normality**
+* **Test Assumption 2 - Normality**
 
 In order to verify normality we run a Shapiro Wilk test.
 
@@ -124,16 +130,16 @@ In order to verify normality we run a Shapiro Wilk test.
 shapiro.test(m2$residuals)
 ```
 
-The result show that we cannot reject normallity. And in order to verify it graphically we used
+The result show that we cannot reject normality. And in order to verify it graphically we used
 the QQ-plot of the residuals.
 
 ```{r 2_q_4}
 car::qqPlot(m2$residuals)
 ```
 
-The QQplot on the residuals shows normallity.
+The QQplot on the residuals shows normality.
 
-* **Test Assumtion 3 - Independence**
+* **Test Assumption 3 - Independence**
 
 Based on how we collected the data, we can assume independence.
 
@@ -148,6 +154,8 @@ car::Anova(m2)
 The ANOVA test shows that we can reject that Language, Experience, Language:IDE,
 Language:Experience and IDE:Experience has the same mean for the levels because 
 of the low p values.
+
+So our conclusions on the experiment hypothesis are:
 
 **Hypothesis 1**: IDE doesn't seem to have an effect on LOC neither alone nor as an interaction.
 
